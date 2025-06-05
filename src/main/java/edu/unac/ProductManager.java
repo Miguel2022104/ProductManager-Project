@@ -51,7 +51,7 @@ public class ProductManager {
         return result;
     }
 
-    //Nuevo metodo
+    /*Nuevo metodo
     public boolean processOrder(String orderId) {
         if (orderId == null || orderId.isEmpty()) {
             System.out.println("Invalid order ID.");
@@ -59,6 +59,6 @@ public class ProductManager {
         }
         System.out.println("Processing order: " + orderId);
         return true;
-    }
+    }*/
 
 }
