@@ -67,7 +67,25 @@ class ProductManagerTest {
         assertTrue(allProducts.contains(p3));
     }
 
+    @Test
+    void testGetProductsByPriceRange() {
+        ProductManager manager = new ProductManager();
+        // Datos de prueba mínimos para cubrir los escenarios
+        manager.addProduct(new Product("A", "Product A", "Category", 50.0));
+        manager.addProduct(new Product("B", "Product B", "Category", 150.0));
+        manager.addProduct(new Product("C", "Product C", "Category", 75.0));
 
+        // Encontrar productos en un rango válido
+        List<Product> foundProducts = manager.getProductsByPriceRange(40.0, 100.0);
+        assertEquals(2, foundProducts.size(), "Debe encontrar 2 productos en el rango de 40 a 100.");
+        assertTrue(foundProducts.stream().anyMatch(p -> p.getName().equals("Product A")), "Debe incluir Product A.");
+        assertTrue(foundProducts.stream().anyMatch(p -> p.getName().equals("Product C")), "Debe incluir Product C.");
+
+
+        // Rango sin productos
+        List<Product> emptyRange = manager.getProductsByPriceRange(200.0, 300.0);
+        assertTrue(emptyRange.isEmpty(), "No debe encontrar productos en un rango vacío.");
+    }
 
 
 
