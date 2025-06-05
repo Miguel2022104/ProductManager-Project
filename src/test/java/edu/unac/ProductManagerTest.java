@@ -42,10 +42,14 @@ class ProductManagerTest {
         ProductManager manager = new ProductManager();
         manager.addProduct(new Product("1", "Laptop", "Electronics", 1200.0));
         manager.addProduct(new Product("2", "Shirt", "Clothing", 40.0));
+        // Agregué este producto para tener un caso más completo de categoría
+        manager.addProduct(new Product("3", "Monitor", "Electronics", 300.0));
 
         List<Product> electronics = manager.getProductsByCategory("Electronics");
-        assertEquals(1, electronics.size());
-        assertEquals("Laptop", electronics.get(0).getName());
+        // Ahora esperamos 2 productos en la categoría "Electronics"
+        assertEquals(2, electronics.size());
+        assertTrue(electronics.stream().anyMatch(p -> p.getName().equals("Laptop")));
+        assertTrue(electronics.stream().anyMatch(p -> p.getName().equals("Monitor")));
     }
 
     @Test
@@ -67,4 +71,37 @@ class ProductManagerTest {
         assertTrue(allProducts.contains(p3));
     }
 
+    @Test
+    void testGetProductsByPriceRange() {
+        ProductManager manager = new ProductManager();
+        manager.addProduct(new Product("1", "Laptop", "Electronics", 1200.0));
+        manager.addProduct(new Product("2", "Shirt", "Clothing", 40.0));
+        manager.addProduct(new Product("3", "Book", "Education", 25.0));
+        manager.addProduct(new Product("4", "Tablet", "Electronics", 500.0));
+        manager.addProduct(new Product("5", "Headphones", "Electronics", 150.0));
+
+        // Test un rango que incluye múltiples productos
+        List<Product> affordableProducts = manager.getProductsByPriceRange(20.0, 100.0);
+        assertEquals(1, affordableProducts.size());
+        assertEquals("Shirt", affordableProducts.get(0).getName());
+
+        // Test un rango que incluye un producto en el límite inferior
+        List<Product> midRangeProducts = manager.getProductsByPriceRange(150.0, 500.0);
+        assertEquals(2, midRangeProducts.size());
+        assertTrue(midRangeProducts.stream().anyMatch(p -> p.getName().equals("Headphones")));
+        assertTrue(midRangeProducts.stream().anyMatch(p -> p.getName().equals("Tablet")));
+
+        // Test un rango que incluye un producto en el límite superior
+        List<Product> expensiveProducts = manager.getProductsByPriceRange(1000.0, 1500.0);
+        assertEquals(1, expensiveProducts.size());
+        assertEquals("Laptop", expensiveProducts.get(0).getName());
+
+        // Test un rango sin productos
+        List<Product> emptyRange = manager.getProductsByPriceRange(2000.0, 3000.0);
+        assertTrue(emptyRange.isEmpty());
+
+        // Test un rango donde min > max (esperamos una lista vacía)
+        List<Product> invalidRange = manager.getProductsByPriceRange(100.0, 10.0);
+        assertTrue(invalidRange.isEmpty());
+    }
 }
