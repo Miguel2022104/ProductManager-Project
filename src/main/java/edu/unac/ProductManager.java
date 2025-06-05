@@ -33,4 +33,23 @@ public class ProductManager {
     public List<Product> listAll() {
         return new ArrayList<>(products.values());
     }
+
+    /**
+     * Retrieves a list of products whose price falls within the specified range (inclusive).
+     * This method fulfills the task requirement.
+     * @param min The minimum price.
+     * @param max The maximum price.
+     * @return A list of products within the given price range.
+     */
+    public List<Product> getProductsByPriceRange(double min, double max) {
+        List<Product> result = new ArrayList<>();
+        for (Product p : products.values()) {
+            if (p.getPrice() >= min && p.getPrice() <= max) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+
 }
